@@ -24,123 +24,123 @@ int loops = 0;
 
 void setup()
 {
-	// Initialize input pins
-	for (int i = 0; i<sizeof(inputPins)/sizeof(inputPins[0]); i++) {
-		pinMode(inputPins[i], INPUT);
-	}
+    // Initialize input pins
+    for (int i = 0; i<sizeof(inputPins)/sizeof(inputPins[0]); i++) {
+        pinMode(inputPins[i], INPUT);
+    }
 
-	// Initialize output pins
-	for (int i = 0; i<sizeof(outputPins)/sizeof(outputPins[0]); i++) {
-		pinMode(outputPins[i], OUTPUT);
-	}
+    // Initialize output pins
+    for (int i = 0; i<sizeof(outputPins)/sizeof(outputPins[0]); i++) {
+        pinMode(outputPins[i], OUTPUT);
+    }
 }
 
 int calcPins()
 {
-	int pinVal = 1;
-	int total = 0;
-	for (int i = 0; i<sizeof(inputPins)/sizeof(inputPins[0]); i++) {
-		if (digitalRead(inputPins[i])==HIGH) {
-			total += pinVal;
-		}
-		pinVal *= 2;
-	}
-	return total;
+    int pinVal = 1;
+    int total = 0;
+    for (int i = 0; i<sizeof(inputPins)/sizeof(inputPins[0]); i++) {
+        if (digitalRead(inputPins[i])==HIGH) {
+            total += pinVal;
+        }
+        pinVal *= 2;
+    }
+    return total;
 }
 
 void loop()
 {
-	int value = calcPins();
-	if (value!=0) {
-		delayTime = initialDelayTime / value;
-		AnimationFunction animation = animationFunctions[mode];
-		animation(value);
-	} else {
-		delay(100);
-	}
+    int value = calcPins();
+    if (value!=0) {
+        delayTime = initialDelayTime / value;
+        AnimationFunction animation = animationFunctions[mode];
+        animation(value);
+    } else {
+        delay(100);
+    }
 
-	loops++;
-	if (loops%10==0) {
-		mode = (mode+1)%5;
-		Serial.print("Mode: ");
-		Serial.println(mode);
-	}
-	delay(8*delayTime);
+    loops++;
+    if (loops%10==0) {
+        mode = (mode+1)%5;
+        Serial.print("Mode: ");
+        Serial.println(mode);
+    }
+    delay(8*delayTime);
 }
 
 void animatePins(int value)
 {
-	for (int i = 0; i<value; i++) {
-		digitalWrite(outputPins[i], HIGH);
-		delay(delayTime);
-	}
+    for (int i = 0; i<value; i++) {
+        digitalWrite(outputPins[i], HIGH);
+        delay(delayTime);
+    }
 
-	for (int i = 0; i<value; i++) {
-		digitalWrite(outputPins[i], LOW);
-		delay(delayTime);
-	}
+    for (int i = 0; i<value; i++) {
+        digitalWrite(outputPins[i], LOW);
+        delay(delayTime);
+    }
 }
 
 void bounce(int value)
 {
-	for (int i = 0; i<value; i++) {
-		digitalWrite(outputPins[i], HIGH);
-		delay(delayTime/2);
-	}
+    for (int i = 0; i<value; i++) {
+        digitalWrite(outputPins[i], HIGH);
+        delay(delayTime/2);
+    }
 
-	for (int i = value-1; i>=0; i--) {
-		digitalWrite(outputPins[i], LOW);
-		delay(delayTime/2);
-	}
+    for (int i = value-1; i>=0; i--) {
+        digitalWrite(outputPins[i], LOW);
+        delay(delayTime/2);
+    }
 }
 
 void backBounce(int value)
 {
-	for (int i = value-1; i>=0; i--) {
-		digitalWrite(outputPins[i], HIGH);
-		delay(delayTime/2);
-	}
+    for (int i = value-1; i>=0; i--) {
+        digitalWrite(outputPins[i], HIGH);
+        delay(delayTime/2);
+    }
 
-	for (int i = 0; i<value; i++) {
-		digitalWrite(outputPins[i], LOW);
-		delay(delayTime/2);
-	}
+    for (int i = 0; i<value; i++) {
+        digitalWrite(outputPins[i], LOW);
+        delay(delayTime/2);
+    }
 }
 
 void outIn(int value)
 {
-	for (int i = 0; i<value/2+1; i++) {
-		int left = i;
-		int right = value-i-1;
-		digitalWrite(outputPins[left], HIGH);
-		digitalWrite(outputPins[right], HIGH);
-		delay(2*delayTime);
-	}
+    for (int i = 0; i<value/2+1; i++) {
+        int left = i;
+        int right = value-i-1;
+        digitalWrite(outputPins[left], HIGH);
+        digitalWrite(outputPins[right], HIGH);
+        delay(2*delayTime);
+    }
 
-	for (int i = 0; i<value/2+1; i++) {
-		int left = i;
-		int right = value-i-1;
-		digitalWrite(outputPins[left], LOW);
-		digitalWrite(outputPins[right], LOW);
-		delay(delayTime);
-	}
+    for (int i = 0; i<value/2+1; i++) {
+        int left = i;
+        int right = value-i-1;
+        digitalWrite(outputPins[left], LOW);
+        digitalWrite(outputPins[right], LOW);
+        delay(delayTime);
+    }
 }
 
 void inOut(int value)
 {
-	for (int i = 0; i<=(value-1)/2; i++) {
-		int left = (value-1)/2-i;
-		int right = value/2+i;
-		digitalWrite(outputPins[left], HIGH);
-		digitalWrite(outputPins[right], HIGH);
-		delay(delayTime);
-	}
+    for (int i = 0; i<=(value-1)/2; i++) {
+        int left = (value-1)/2-i;
+        int right = value/2+i;
+        digitalWrite(outputPins[left], HIGH);
+        digitalWrite(outputPins[right], HIGH);
+        delay(delayTime);
+    }
 
-	for (int i = 0; i<=(value-1)/2; i++) {
-		int left = (value-1)/2-i;
-		int right = value/2+i;
-		digitalWrite(outputPins[left], LOW);
-		digitalWrite(outputPins[right], LOW);
-		delay(delayTime);
-	}
+    for (int i = 0; i<=(value-1)/2; i++) {
+        int left = (value-1)/2-i;
+        int right = value/2+i;
+        digitalWrite(outputPins[left], LOW);
+        digitalWrite(outputPins[right], LOW);
+        delay(delayTime);
+    }
 }
