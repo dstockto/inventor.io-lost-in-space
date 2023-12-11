@@ -1,10 +1,21 @@
 #include <Arduino.h>
 
+typedef void (*AnimationFunction)(int*);
+
 // Define input and output pins
 int inputPins[] = {4, 3, 2};
 int outputPins[] = {13, 12, 11, 10, 9, 8, 7};
 int delayTime = 25; // Delay in milliseconds
 int mode = 0;
+
+void animatePins(int value);
+void bounce(int value);
+void backBounce(int value);
+void outIn(int value);
+void inOut(int value);
+
+AnimationFunction animationFunctions[] = {animatePins, bounce, backBounce, outIn, inOut};
+int numFunctions = sizeof(animationFunctions) / sizeof(animationFunctions[0]);
 
 void setup() {
   // Initialize input pins
@@ -38,23 +49,8 @@ void loop() {
   while (true) {
     int value = calcPins();
     if (value != 0) {
-      switch (mode) {
-        case 0:
-          animatePins(value);
-          break;
-        case 1:
-          bounce(value);
-          break;
-        case 2:
-          backBounce(value);
-          break;
-        case 3:
-          outIn(value);
-          break;
-        case 4:
-          inOut(value);
-          break;
-      }
+      AnimationFunction animation = animationFunctions[mode];
+      animation(value);
     } else {
       delay(100);
     }
